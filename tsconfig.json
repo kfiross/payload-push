@@ -30,5 +30,6 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./dev/next-env.d.ts",
+    ".src/types/global.d.ts"
   ],
 }

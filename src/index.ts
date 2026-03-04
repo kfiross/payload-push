@@ -1,56 +1,36 @@
-import type { CollectionSlug, Config } from 'payload'
+import type { Config } from 'payload'
 
-import { customEndpointHandler } from './endpoints/customEndpointHandler.js'
+import type { PushAdapter } from './types/index.js'
 
-export type PayloadPushConfig = {
-  /**
-   * List of collections to add a custom field
-   */
-  collections?: Partial<Record<CollectionSlug, true>>
+import fcmPushEndpointHandler from './endpoints/fcmPushEndpointHandler.js'
+import { payloadPush } from './payloadPush.js'
+
+export type PayloadPushPluginConfig = {
   disabled?: boolean
+  pushAdapter: PushAdapter
 }
 
-export const payloadPush =
-  (pluginOptions: PayloadPushConfig) =>
+export const payloadPushPlugin =
+  (pluginOptions?: PayloadPushPluginConfig) =>
   (config: Config): Config => {
     if (!config.collections) {
       config.collections = []
-    }
-
-    config.collections.push({
-      slug: 'plugin-collection',
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-      ],
-    })
-
-    if (pluginOptions.collections) {
-      for (const collectionSlug in pluginOptions.collections) {
-        const collection = config.collections.find(
-          (collection) => collection.slug === collectionSlug,
-        )
-
-        if (collection) {
-          collection.fields.push({
-            name: 'addedByPlugin',
-            type: 'text',
-            admin: {
-              position: 'sidebar',
-            },
-          })
-        }
-      }
     }
 
     /**
      * If the plugin is disabled, we still want to keep added collections/fields so the database schema is consistent which is important for migrations.
      * If your plugin heavily modifies the database schema, you may want to remove this property.
      */
-    if (pluginOptions.disabled) {
+    if (pluginOptions?.disabled) {
       return config
+    }
+
+    if (!pluginOptions?.pushAdapter) {
+      throw new Error('pushAdapter is missing')
+    }
+
+    if (!config.endpoints) {
+      config.endpoints = []
     }
 
     if (!config.endpoints) {
@@ -65,21 +45,10 @@ export const payloadPush =
       config.admin.components = {}
     }
 
-    if (!config.admin.components.beforeDashboard) {
-      config.admin.components.beforeDashboard = []
-    }
-
-    config.admin.components.beforeDashboard.push(
-      `payload-push/client#BeforeDashboardClient`,
-    )
-    config.admin.components.beforeDashboard.push(
-      `payload-push/rsc#BeforeDashboardServer`,
-    )
-
     config.endpoints.push({
-      handler: customEndpointHandler,
-      method: 'get',
-      path: '/my-plugin-endpoint',
+      handler: fcmPushEndpointHandler(pluginOptions),
+      method: 'post',
+      path: '/test-push/firebase',
     })
 
     const incomingOnInit = config.onInit
@@ -90,23 +59,13 @@ export const payloadPush =
         await incomingOnInit(payload)
       }
 
-      const { totalDocs } = await payload.count({
-        collection: 'plugin-collection',
-        where: {
-          id: {
-            equals: 'seeded-by-plugin',
-          },
-        },
-      })
+      payloadPush.init(payload, pluginOptions.pushAdapter)
 
-      if (totalDocs === 0) {
-        await payload.create({
-          collection: 'plugin-collection',
-          data: {
-            id: 'seeded-by-plugin',
-          },
-        })
-      }
+      // Optionally inject into payload so user can use: payload.push.sendPush()
+      // @ts-ignore
+      payload.push = payloadPush
+
+      payload.logger.info('📱 Payload Push initialized with custom adapter')
     }
 
     return config

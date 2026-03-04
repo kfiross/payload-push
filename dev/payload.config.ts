@@ -3,12 +3,14 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { MongoMemoryReplSet } from 'mongodb-memory-server'
 import path from 'path'
 import { buildConfig } from 'payload'
-import { payloadPush } from 'payload-push'
+import { payloadPushPlugin } from 'payload-push'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
+import { firebaseAdapter } from '../src/adapters/push-firebase.js'
 import { testEmailAdapter } from './helpers/testEmailAdapter.js'
-import { seed } from './seed.js'
+import { payloadPush } from '../src/payloadPush.js'
+// import { seed } from './seed.js'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -38,7 +40,30 @@ const buildConfigWithMemoryDB = async () => {
     collections: [
       {
         slug: 'posts',
-        fields: [],
+        fields: [
+          {
+            name: 'title',
+            type: 'text',
+          },
+          {
+            name: 'content',
+            type: 'text',
+          },
+        ],
+        hooks: {
+          afterChange: [
+            (doc, previousDoc) => {
+              void payloadPush.sendPush({
+                body: 'heLLo FroM pLugIn!!',
+                title: 'afterChange test',
+                options: {
+                  topic: 'user-itOjpF2lsdgk1KPW5zeit6fxft02',
+                },
+              })
+              return doc
+            },
+          ],
+        },
       },
       {
         slug: 'media',
@@ -50,18 +75,23 @@ const buildConfigWithMemoryDB = async () => {
     ],
     db: mongooseAdapter({
       ensureIndexes: true,
-      url: process.env.DATABASE_URL || '',
+      autoPluralization: true,
+      url: 'mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.7.0',
+      //process.env.DATABASE_URL || '',
     }),
     editor: lexicalEditor(),
     email: testEmailAdapter,
-    onInit: async (payload) => {
-      await seed(payload)
+    onInit: () => {
+      console.log('onInit called')
+      // await seed(payload)
     },
     plugins: [
-      payloadPush({
-        collections: {
-          posts: true,
-        },
+      payloadPushPlugin({
+        pushAdapter: firebaseAdapter({
+          serviceAccountJSON: {
+            // ADD service-account.json data here
+          },
+        }),
       }),
     ],
     secret: process.env.PAYLOAD_SECRET || 'test-secret_key',
