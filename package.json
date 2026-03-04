@@ -1,6 +1,6 @@
 {
   "name": "payload-push",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "A blank template to get started with Payload 3.0",
   "license": "MIT",
   "type": "module",
@@ -27,9 +27,9 @@
     "dist"
   ],
   "scripts": {
+    "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
     "format": "bun x prettier --write '**/*.{js,jsx,ts,tsx,json,md,yaml,yml}'",
     "release": "bun run build && changeset publish",
-    "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths --ignore **/*.d.ts",
     "build:types": "tsc --outDir dist --rootDir ./src",
     "clean": "rimraf {dist,*.tsbuildinfo}",
@@ -47,6 +47,7 @@
     "test:int": "vitest"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@eslint/eslintrc": "^3.2.0",
     "@payloadcms/db-mongodb": "3.37.0",
     "@payloadcms/db-postgres": "3.37.0",
@@ -82,8 +83,8 @@
     "vitest": "4.0.18"
   },
   "peerDependencies": {
-    "payload": "^3.37.0",
-    "firebase-admin": "^13.5.0"
+    "firebase-admin": "^13.5.0",
+    "payload": "^3.37.0"
   },
   "engines": {
     "node": "^18.20.2 || >=20.9.0",
@@ -107,6 +108,5 @@
       "unrs-resolver"
     ]
   },
-  "registry": "https://registry.npmjs.org/",
-  "dependencies": {}
+  "registry": "https://registry.npmjs.org/"
 }
