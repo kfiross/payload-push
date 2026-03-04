@@ -1,6 +1,5 @@
 import type { payloadPush } from '../payloadPush.js'
-import { BasePayload } from 'payload';
-
+import { BasePayload } from 'payload'
 
 declare module 'payload' {
   interface BasePayload {

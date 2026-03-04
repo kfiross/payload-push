@@ -51,7 +51,7 @@ const fcmPushEndpointHandler = (pluginOptions: PayloadPushPluginConfig) => {
     }
   }
 
-  return handler;
+  return handler
 }
 
 export default fcmPushEndpointHandler

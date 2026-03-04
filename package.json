@@ -4,6 +4,16 @@
   "description": "A blank template to get started with Payload 3.0",
   "license": "MIT",
   "type": "module",
+  "keywords": [
+    "payload",
+    "cms",
+    "push",
+    "fcm",
+    "push-message",
+    "typescript",
+    "react",
+    "nextjs"
+  ],
   "exports": {
     ".": {
       "import": "./src/index.ts",
@@ -17,8 +27,10 @@
     "dist"
   ],
   "scripts": {
+    "format": "bun x prettier --write '**/*.{js,jsx,ts,tsx,json,md,yaml,yml}'",
+    "release": "bun run build && changeset publish",
     "build": "pnpm copyfiles && pnpm build:types && pnpm build:swc",
-    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
+    "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths --ignore **/*.d.ts",
     "build:types": "tsc --outDir dist --rootDir ./src",
     "clean": "rimraf {dist,*.tsbuildinfo}",
     "copyfiles": "copyfiles -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",

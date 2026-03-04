@@ -1,6 +1,4 @@
-
-import type { BatchResponse, TopicMessage } from "firebase-admin/messaging"
-
+import type { BatchResponse, TopicMessage } from 'firebase-admin/messaging'
 
 // import { APIError } from "payload"
 
@@ -9,35 +7,33 @@ import admin from 'firebase-admin'
 import type { PushAdapter, SendPushOptions } from '../types/index.js'
 
 type ServiceAccountJSONData = {
-  auth_provider_x509_cert_url: string,
-  auth_uri: string,
-  client_email: string,
-  client_id: string,
-  client_x509_cert_url: string,
-  private_key: string,
-  private_key_id: string,
-  project_id: string,
-  token_uri: string,
-  type: string,
-  universe_domain: string,
+  auth_provider_x509_cert_url: string
+  auth_uri: string
+  client_email: string
+  client_id: string
+  client_x509_cert_url: string
+  private_key: string
+  private_key_id: string
+  project_id: string
+  token_uri: string
+  type: string
+  universe_domain: string
 }
 
 export type FirebaseAdapterArgs = {
-	serviceAccountJSON: ServiceAccountJSONData
+  serviceAccountJSON: ServiceAccountJSONData
 }
 
 type FirebasePushAdapter = PushAdapter<firebaseResponse>
 
 type firebaseError = {
-	error: {
-		code: string
-		message: string
-	}
+  error: {
+    code: string
+    message: string
+  }
 }
 
 type firebaseResponse = { messageId: string } | BatchResponse | firebaseError
-
-
 
 // export const firebaseAdapter = (args: firebaseAdapterArgs): FirebasePushAdapter => {
 // 	const {
@@ -103,15 +99,14 @@ export const firebaseAdapter = ({ serviceAccountJSON }: FirebaseAdapterArgs) => 
 
     const creds = serviceAccountJSON || undefined
 
-    try{
+    try {
       admin.initializeApp({
         credential: creds
           ? admin.credential.cert(creds as admin.ServiceAccount)
           : admin.credential.applicationDefault(),
       })
       console.log('✅ Firebase admin app initialized', admin.app().name)
-    }
-    catch(e){
+    } catch (e) {
       console.error(e)
       console.log('❌ Firebase admin app initialized failed', e)
     }
@@ -137,33 +132,33 @@ export const firebaseAdapter = ({ serviceAccountJSON }: FirebaseAdapterArgs) => 
         title: message.title,
       }
 
-      console.log({sendPushOptions})
+      console.log({ sendPushOptions })
 
-     try {
-      if(sendPushOptions.topic) {
-        const payload: TopicMessage = {
-          data: message.data,
-          notification,
-          topic: sendPushOptions.topic,
-        }
+      try {
+        if (sendPushOptions.topic) {
+          const payload: TopicMessage = {
+            data: message.data,
+            notification,
+            topic: sendPushOptions.topic,
+          }
 
-        const res = await fcm.send(payload)
-        console.log('✅ Push to single token:', res)
-          if(res){
-          return { messageId: res}
+          const res = await fcm.send(payload)
+          console.log('✅ Push to single token:', res)
+          if (res) {
+            return { messageId: res }
+          }
         }
-      }
-      if(sendPushOptions.tokens && sendPushOptions.tokens.length){
-        const res = await fcm.sendEachForMulticast({
+        if (sendPushOptions.tokens && sendPushOptions.tokens.length) {
+          const res = await fcm.sendEachForMulticast({
             data: message.data,
             notification,
             tokens: sendPushOptions.tokens,
           })
           console.log('✅ Push multicast result:', res)
           return res
-      }
+        }
 
-        if(sendPushOptions.token){
+        if (sendPushOptions.token) {
           const res = await fcm.send({
             data: message.data,
             notification,
@@ -171,8 +166,8 @@ export const firebaseAdapter = ({ serviceAccountJSON }: FirebaseAdapterArgs) => 
           })
           console.log('✅ Push to token:', res)
 
-          return { messageId: res}
-       }
+          return { messageId: res }
+        }
 
         throw new Error('No token(s) or topic provided')
       } catch (err) {
@@ -184,73 +179,71 @@ export const firebaseAdapter = ({ serviceAccountJSON }: FirebaseAdapterArgs) => 
   return adapter
 }
 
-function mapPayloadToFirebasePush(
-	message: SendPushOptions
-): firebasePushOptions {
-	const pushOptions: Partial<firebasePushOptions> = {
+function mapPayloadToFirebasePush(message: SendPushOptions): firebasePushOptions {
+  const pushOptions: Partial<firebasePushOptions> = {
     body: message.body,
     title: message.title,
-	}
-
-  if(!message.options){
-    return pushOptions as firebasePushOptions;
   }
 
-  if(message.options['token']){
+  if (!message.options) {
+    return pushOptions as firebasePushOptions
+  }
+
+  if (message.options['token']) {
     const token = message.options['token']
     pushOptions.token = token
   }
 
-  if(message.options['tokens']){
+  if (message.options['tokens']) {
     const tokens = message.options['tokens']
     pushOptions.tokens = tokens
   }
 
-  if(message.options['topic']){
+  if (message.options['topic']) {
     const topic = message.options['topic']
     pushOptions.topic = topic
   }
 
-  if(message.options['android']){
+  if (message.options['android']) {
     const android = message.options['android']
     pushOptions.android = android
   }
 
-  if(message.options['apns']){
+  if (message.options['apns']) {
     const apns = message.options['apns']
     pushOptions.apns = apns
   }
 
-	// if (message.text?.toString().trim().length > 0) {
-	// 	pushOptions.text = message.text
-	// } else {
-	// 	pushOptions.text = "Please view this email in an HTML-compatible client."
-	// }
+  // if (message.text?.toString().trim().length > 0) {
+  // 	pushOptions.text = message.text
+  // } else {
+  // 	pushOptions.text = "Please view this email in an HTML-compatible client."
+  // }
 
-	// if (message.html?.toString().trim()) {
-	// 	pushOptions.html = message.html.toString()
-	// }
+  // if (message.html?.toString().trim()) {
+  // 	pushOptions.html = message.html.toString()
+  // }
 
-	// if (message.attachments?.length) {
-	// 	if (message.attachments.length > 10) {
-	// 		throw new APIError("Maximum of 10 attachments allowed", 400)
-	// 	}
-	// 	pushOptions.attachments = mapAttachments(message.attachments)
-	// }
+  // if (message.attachments?.length) {
+  // 	if (message.attachments.length > 10) {
+  // 		throw new APIError("Maximum of 10 attachments allowed", 400)
+  // 	}
+  // 	pushOptions.attachments = mapAttachments(message.attachments)
+  // }
 
-	// if (message.replyTo) {
-	// 	pushOptions.replyTo = mapAddresses(message.replyTo)
-	// }
+  // if (message.replyTo) {
+  // 	pushOptions.replyTo = mapAddresses(message.replyTo)
+  // }
 
-	// if (message.cc) {
-	// 	pushOptions.cc = mapAddresses(message.cc)
-	// }
+  // if (message.cc) {
+  // 	pushOptions.cc = mapAddresses(message.cc)
+  // }
 
-	// if (message.bcc) {
-	// 	pushOptions.bcc = mapAddresses(message.bcc)
-	// }
+  // if (message.bcc) {
+  // 	pushOptions.bcc = mapAddresses(message.bcc)
+  // }
 
-	return pushOptions as firebasePushOptions
+  return pushOptions as firebasePushOptions
 }
 
 // function mapFromAddress(
@@ -324,18 +317,18 @@ function mapPayloadToFirebasePush(
 // }
 
 type firebasePushOptions = {
-	android?: admin.messaging.AndroidConfig
-	apns?: admin.messaging.ApnsConfig
+  android?: admin.messaging.AndroidConfig
+  apns?: admin.messaging.ApnsConfig
   body: string
   /**
-	 * The date and time to send the email. If not provided, the email will be sent immediately.
-	 */
-	scheduledAt?: string
+   * The date and time to send the email. If not provided, the email will be sent immediately.
+   */
+  scheduledAt?: string
   title: string
   token?: string
   tokens?: string[]
 
-	topic?: string
+  topic?: string
 }
 
 // type Attachment = {
