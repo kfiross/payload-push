@@ -8,8 +8,8 @@ import sharp from 'sharp'
 import { fileURLToPath } from 'url'
 
 import { firebaseAdapter } from '../src/adapters/push-firebase.js'
-import { testEmailAdapter } from './helpers/testEmailAdapter.js'
 import { payloadPush } from '../src/payloadPush.js'
+import { testEmailAdapter } from './helpers/testEmailAdapter.js'
 // import { seed } from './seed.js'
 
 const filename = fileURLToPath(import.meta.url)
