@@ -48,16 +48,18 @@ Planned integrations may include:
 ## Installation
 
 ``` sh
-pnpm add firebase-admin
+pnpm add @kfiross44/payload-push
 ```
 
 ------------------------------------------------------------------------
 
 ## Prerequisites
 
-1.  Create a Firebase project\
-2.  Enable Firebase Cloud Messaging (FCM)\
-3.  Generate a **Service Account Key (JSON)**\
+### Firebase Adapter 
+
+1.  Create a Firebase project
+2.  Enable Firebase Cloud Messaging (FCM)
+3.  Generate a **Service Account Key (JSON)**
 4.  Store the service account JSON securely (environment variable or
     secret manager)
 
