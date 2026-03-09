@@ -68,17 +68,35 @@ pnpm add @kfiross44/payload-push
 ## Usage
 
 ### Firebase Adapter
+
+All data should based on your generated JSON file (`project-id-firebase-adminsdk-xxxxx-xxxxxxxxxx.json`) from Firebase Console
 ``` ts
 // payload.config.ts
 import { buildConfig } from 'payload'
 import { firebaseAdapter } from '@kfiross/payload-push'
 
 export default buildConfig({
-  push: firebaseAdapter({
-    serviceAccountJSON: JSON.parse(
-      process.env.FIREBASE_SERVICE_ACCOUNT_JSON!
-    ),
-  }),
+  plugins: [
+      // ... other plugins configuration
+      
+      payloadPushPlugin({
+        firebaseAdapter({
+          serviceAccountJSON: {
+            type: "service_account",
+            project_id: process.env.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID!,
+            private_key_id: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_ID!,
+            private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY!,
+            client_email: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL!,
+            client_id: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID!,
+            auth_uri: "https://accounts.google.com/o/oauth2/auth",
+            token_uri: "https://oauth2.googleapis.com/token",
+            auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+            client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40rescue-263a6.iam.gserviceaccount.com",
+            universe_domain: "googleapis.com"
+          }
+        }),
+      }),
+    ],
 })
 ```
 

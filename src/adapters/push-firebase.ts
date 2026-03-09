@@ -7,17 +7,17 @@ import admin from 'firebase-admin'
 import type { PushAdapter, SendPushOptions } from '../types/index.js'
 
 type ServiceAccountJSONData = {
-  auth_provider_x509_cert_url: string
-  auth_uri: string
+  auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs'
+  auth_uri: 'https://accounts.google.com/o/oauth2/auth'
   client_email: string
   client_id: string
   client_x509_cert_url: string
   private_key: string
   private_key_id: string
   project_id: string
-  token_uri: string
-  type: string
-  universe_domain: string
+  token_uri: 'https://oauth2.googleapis.com/token'
+  type: 'service_account'
+  universe_domain: 'googleapis.com'
 }
 
 export type FirebaseAdapterArgs = {
