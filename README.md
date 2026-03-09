@@ -110,7 +110,7 @@ export default buildConfig({
 - Sending a Push Notification
 
 ```ts
-await payload.push.send({
+await payloadPush.sendPush({
   title: 'New Booking Confirmed',
   body: 'Your booking has been successfully confirmed.',
   data: {
@@ -125,7 +125,7 @@ await payload.push.send({
 - Sending to Multiple Devices
 
 ```ts
-await payload.push.send({
+await payloadPush.sendPush({
   title: 'System Update',
   body: 'We have updated our terms of service.',
   options: {
@@ -137,7 +137,7 @@ await payload.push.send({
 - Sending to a Topic
 
 ```ts
-await payload.push.send({
+await payloadPush.sendPush({
   title: 'Weekly Newsletter',
   body: 'Check out what’s new this week!',
   options: {
