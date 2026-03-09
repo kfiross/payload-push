@@ -1,6 +1,6 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import dotenv from "dotenv"
+import dotenv from 'dotenv'
 import { MongoMemoryReplSet } from 'mongodb-memory-server'
 import path from 'path'
 import { buildConfig } from 'payload'
@@ -93,18 +93,19 @@ const buildConfigWithMemoryDB = async () => {
         pushAdapter: firebaseAdapter({
           // ADD service-account.json data here
           serviceAccountJSON: {
-            type: "service_account",
+            type: 'service_account',
             project_id: process.env.FIREBASE_SERVICE_ACCOUNT_PROJECT_ID!,
             private_key_id: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_ID!,
             private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY!,
             client_email: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL!,
             client_id: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID!,
-            auth_uri: "https://accounts.google.com/o/oauth2/auth",
-            token_uri: "https://oauth2.googleapis.com/token",
-            auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-            client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40rescue-263a6.iam.gserviceaccount.com",
-            universe_domain: "googleapis.com"
-          }
+            auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+            token_uri: 'https://oauth2.googleapis.com/token',
+            auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+            client_x509_cert_url:
+              'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40rescue-263a6.iam.gserviceaccount.com',
+            universe_domain: 'googleapis.com',
+          },
         }),
       }),
     ],

@@ -9,7 +9,7 @@ adapter** powered by the Firebase Admin SDK and Firebase Cloud Messaging
 (FCM), with additional providers planned for future releases (such as
 OneSignal).
 
-------------------------------------------------------------------------
+---
 
 ## Available Adapters
 
@@ -23,39 +23,39 @@ web, iOS, and Android devices.
 Built on top of Firebase and Firebase Cloud Messaging (FCM), this
 adapter allows teams to send:
 
--   Single-device notifications
--   Multicast push notifications
--   Topic-based broadcast notifications
--   Platform-specific (Android / APNs) configurations
+- Single-device notifications
+- Multicast push notifications
+- Topic-based broadcast notifications
+- Platform-specific (Android / APNs) configurations
 
 By leveraging the Firebase Admin SDK, organisations retain full control
 over credentials, infrastructure, and deployment topology while
 simplifying push delivery from within Payload.
 
-------------------------------------------------------------------------
+---
 
 ## Roadmap
 
 The plugin is designed to support multiple providers through adapters.
 Planned integrations may include:
 
--  OneSignal
--  Additional self-hosted or API-first push services
--  Requested by community
+- OneSignal
+- Additional self-hosted or API-first push services
+- Requested by community
 
-------------------------------------------------------------------------
+---
 
 ## Installation
 
-``` sh
+```sh
 pnpm add @kfiross44/payload-push
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Prerequisites
 
-### Firebase Adapter 
+### Firebase Adapter
 
 1.  Create a Firebase project
 2.  Enable Firebase Cloud Messaging (FCM)
@@ -63,14 +63,15 @@ pnpm add @kfiross44/payload-push
 4.  Store the service account JSON securely (environment variable or
     secret manager)
 
-------------------------------------------------------------------------
+---
 
 ## Usage
 
 ### Firebase Adapter
 
 All data should based on your generated JSON file (`project-id-firebase-adminsdk-xxxxx-xxxxxxxxxx.json`) from Firebase Console
-``` ts
+
+```ts
 // payload.config.ts
 import { buildConfig } from 'payload'
 import { firebaseAdapter } from '@kfiross/payload-push'
@@ -78,7 +79,7 @@ import { firebaseAdapter } from '@kfiross/payload-push'
 export default buildConfig({
   plugins: [
       // ... other plugins configuration
-      
+
       payloadPushPlugin({
         firebaseAdapter({
           serviceAccountJSON: {
@@ -100,13 +101,15 @@ export default buildConfig({
 })
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Examples
 
 ### Firebase Adapter
-* Sending a Push Notification
-``` ts
+
+- Sending a Push Notification
+
+```ts
 await payload.push.send({
   title: 'New Booking Confirmed',
   body: 'Your booking has been successfully confirmed.',
@@ -119,9 +122,9 @@ await payload.push.send({
 })
 ```
 
-* Sending to Multiple Devices
+- Sending to Multiple Devices
 
-``` ts
+```ts
 await payload.push.send({
   title: 'System Update',
   body: 'We have updated our terms of service.',
@@ -131,9 +134,9 @@ await payload.push.send({
 })
 ```
 
-* Sending to a Topic
+- Sending to a Topic
 
-``` ts
+```ts
 await payload.push.send({
   title: 'Weekly Newsletter',
   body: 'Check out what’s new this week!',
@@ -143,38 +146,40 @@ await payload.push.send({
 })
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Configuration
 
 ### Firebase Adapter
 
 | Option             | Type   | Required | Default | Description                               |
-|--------------------|--------|----------|---------|-------------------------------------------|
-| serviceAccountJSON             | string | Yes      | -       | Firebase service account credentials JSON |
-
-
+| ------------------ | ------ | -------- | ------- | ----------------------------------------- |
+| serviceAccountJSON | string | Yes      | -       | Firebase service account credentials JSON |
 
 Inside `options`, you may provide:
 
-| Option               | Type     | Description            |
-|----------------------|----------|------------------------|
-| token   | string   | Single device token    |
-| tokens   | string[] | Multiple device tokens |
-| topic   | string   | Subscribed topic name  |
-| android   | object   | Android-specific FCM config    |
-| apns   | object   | iOS/APNs-specific config    |
+| Option  | Type     | Description                 |
+| ------- | -------- | --------------------------- |
+| token   | string   | Single device token         |
+| tokens  | string[] | Multiple device tokens      |
+| topic   | string   | Subscribed topic name       |
+| android | object   | Android-specific FCM config |
+| apns    | object   | iOS/APNs-specific config    |
 
-------------------------------------------------------------------------
+---
 
 ## Example Environment Variable Setup
 
-You may define (for FCM for example): 
-``` bash
-FIREBASE_SERVICE_ACCOUNT_JSON='{"type":"service_account", ...}'
+### Firebase Adapter
+
+```bash
+FIREBASE_SERVICE_ACCOUNT_PROJECT_ID: '..',
+FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY_ID: '..',
+FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY: '..',
+FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL: '..'
 ```
 
-------------------------------------------------------------------------
+---
 
 ## License
 
