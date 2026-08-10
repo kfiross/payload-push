@@ -1,6 +1,6 @@
 {
   "name": "@kfiross44/payload-push",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "unified interface for sending push notifications from within Payload applications.",
   "license": "MIT",
   "type": "module",
@@ -88,9 +88,10 @@
     "payload": "^3.37.0"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
-    "pnpm": "^9 || ^10"
+    "node": ">=22.0.0",
+    "pnpm": "^11.0.0"
   },
+  "packageManager": "pnpm@11.0.0",
   "publishConfig": {
     "access": "public",
     "exports": {
