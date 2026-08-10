@@ -50,7 +50,7 @@ const payloadPushPlugin =
     config.endpoints.push({
       handler: fcmPushEndpointHandler(pluginOptions),
       method: 'post',
-      path: '/test-push/firebase',
+      path: '/send-push/firebase',
     })
 
     const incomingOnInit = config.onInit
