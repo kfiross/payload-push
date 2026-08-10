@@ -5,12 +5,14 @@ import type { PushAdapter } from './types/index.js'
 import fcmPushEndpointHandler from './endpoints/fcmPushEndpointHandler.js'
 import { payloadPush } from './payloadPush.js'
 
-export type PayloadPushPluginConfig = {
+import { firebaseAdapter } from './adapters/push-firebase.js'
+
+type PayloadPushPluginConfig = {
   disabled?: boolean
   pushAdapter: PushAdapter
 }
 
-export const payloadPushPlugin =
+const payloadPushPlugin =
   (pluginOptions?: PayloadPushPluginConfig) =>
   (config: Config): Config => {
     if (!config.collections) {
@@ -70,3 +72,10 @@ export const payloadPushPlugin =
 
     return config
   }
+
+
+export {
+  payloadPushPlugin,
+  type PayloadPushPluginConfig,
+  firebaseAdapter,
+}  
