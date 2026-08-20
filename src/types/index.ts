@@ -12,6 +12,18 @@ export type SendPushOptions = {
   data?: Record<string, any>
   options?: Record<string, any>
 }
+
+export type SchedulePushOptions = SendPushOptions & {
+  scheduledAt?: string
+  // Optional idempotency key to avoid duplicate sends
+  idempotencyKey?: string
+}
+
+export type SendPushJobPayload = {
+  scheduledNotificationId?: string
+  pushOptions?: SchedulePushOptions
+}
+
 //Prettify<Nodpush notificationerSendMailOptions>;
 /**
  * Email adapter after it has been initialized. This is used internally by Payload.
