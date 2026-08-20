@@ -4,7 +4,7 @@ import type { AdminViewServerProps } from 'payload'
 import { DefaultTemplate } from '@payloadcms/next/templates'
 import { Gutter } from '@payloadcms/ui'
 import React from 'react'
-import SendPushForm from './SendPushForm.jsx'
+import SendPushForm from './SendPushForm.js'
 
 export const SendPushMessageView: React.FC<AdminViewServerProps> = ({
   initPageResult,
@@ -30,7 +30,7 @@ export const SendPushMessageView: React.FC<AdminViewServerProps> = ({
       <Gutter>
         <div style={{display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px'}}>
           <h1>Sending a push message</h1>
-          <p>Here you can send a notfication to user or a group of users</p>
+          <p>Here you can send a notification to user or a group of users</p>
         </div>
         <SendPushForm apiBasePath={apiBasePath} />
       </Gutter>
