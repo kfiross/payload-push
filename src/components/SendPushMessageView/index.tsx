@@ -1,11 +1,12 @@
-import type { AdminViewProps } from 'payload'
+// import type { AdminViewProps } from 'payload'
+import type { AdminViewServerProps } from 'payload'
 
 import { DefaultTemplate } from '@payloadcms/next/templates'
 import { Gutter } from '@payloadcms/ui'
 import React from 'react'
 import SendPushForm from './SendPushForm.jsx'
 
-export const SendPushMessageView: React.FC<AdminViewProps> = ({
+export const SendPushMessageView: React.FC<AdminViewServerProps> = ({
   initPageResult,
   params,
   searchParams,

@@ -43,10 +43,6 @@ const payloadPushPlugin =
       config.endpoints = []
     }
 
-    if (!config.endpoints) {
-      config.endpoints = []
-    }
-
     if (!config.admin) {
       config.admin = {}
     }
@@ -65,7 +61,6 @@ const payloadPushPlugin =
 
     config.admin.custom.payloadPush = {
       apiBasePath,
-      options: pluginOptions,
     }
 
     config.endpoints.push({
@@ -86,7 +81,6 @@ const payloadPushPlugin =
         //@ts-ignore
         serverProps: {
           apiBasePath,
-          options: pluginOptions,
         },
         //@ts-ignore
         path: adminRoute,
