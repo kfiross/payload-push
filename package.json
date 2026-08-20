@@ -1,6 +1,6 @@
 {
   "name": "@kfiross44/payload-push",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "unified interface for sending push notifications from within Payload applications.",
   "license": "MIT",
   "type": "module",
